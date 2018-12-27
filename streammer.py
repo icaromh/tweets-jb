@@ -2,7 +2,9 @@ import tweepy
 import json
 import codecs
 import os
+
 from pathlib import Path
+from settings import Settings
 
 def saveToFile(status):
     filename = '{}.json'.format(status.id_str)
@@ -18,8 +20,11 @@ def saveToFile(status):
 class StreamListener(tweepy.StreamListener):
 
     def on_status(self, status):
-        saveToFile(status)
-        print(status.text)
+        if status.user.id_str in Settings.follow_ids:
+            saveToFile(status)
+
+        username = status.user.screen_name.ljust(15)
+        print('@{} - {}'.format(username, status.text))
 
     def on_error(self, err):
         print(err)

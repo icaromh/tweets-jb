@@ -13,6 +13,6 @@ class Settings:
     twitter_secret_token = os.getenv('TWITTER_SECRET_TOKEN', None)
 
     follow_ids = [
-        '128372940'
+        '128372940'  # @jairbolsonaro
     ]
 
