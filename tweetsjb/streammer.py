@@ -5,7 +5,6 @@ import os
 
 from pathlib import Path
 
-from tweetsjb import push_new_tweet
 from tweetsjb.settings import Settings
 
 
