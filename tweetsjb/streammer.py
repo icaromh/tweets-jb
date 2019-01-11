@@ -4,7 +4,10 @@ import codecs
 import os
 
 from pathlib import Path
-from settings import Settings
+
+from tweetsjb import push_new_tweet
+from tweetsjb.settings import Settings
+
 
 def saveToFile(status):
     filename = '{}.json'.format(status.id_str)
