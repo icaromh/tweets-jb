@@ -1,10 +1,10 @@
-# tweets-jb
-
+# Backup the Bolsonaro Family Tweets
 
 - Listen the Twitter Stream API
 - Filter the Tweets from JB
 - Save it on a JSON file
 - Print all mentions to JB
+- Save all the tweets on [this Google Spreadsheet](https://docs.google.com/spreadsheets/d/1hyfoRoXWBQ1vJ2DKL8DTloxERio2zRobyqpwb4-zSdk/edit?usp=sharing)
 
 ### Output example
 ```
