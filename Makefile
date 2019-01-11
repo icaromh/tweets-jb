@@ -10,5 +10,5 @@ docker-build:
 docker-run:
 	docker run --rm -d \
 	-v `pwd`/data:/app/data \
-	--name jbsync
+	--name jbsync \
 	tweetsjb
