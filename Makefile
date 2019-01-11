@@ -8,6 +8,7 @@ docker-build:
 	docker build -t tweetsjb .
 
 docker-run:
-	docker run \
+	docker run --rm -d \
 	-v `pwd`/data:/app/data \
+	--name jbsync
 	tweetsjb
