@@ -12,10 +12,11 @@ class Settings:
     twitter_access_token = os.getenv('TWITTER_ACCESS_TOKEN', None)
     twitter_secret_token = os.getenv('TWITTER_SECRET_TOKEN', None)
 
-    FOLLOW_IDS = [
-        '128372940',    # Jair Bolsonaro
-        '74756085',     # Eduardo Bolsonaro
-        '68712576',     # Carlos Bolsonaro
-        '40053694',     # Flavio Bolsonaro
-    ]
+    FOLLOW_IDS = {
+        '2215588855': 'Ícaro Heimig',
+        # '128372940': 'Jair M. Bolsonaro',   # Jair Bolsonaro
+        # '74756085': 'Eduardo Bolsonaro',    # Eduardo Bolsonaro
+        # '68712576': 'Carlos Bolsonaro',     # Carlos Bolsonaro
+        # '40053694': 'Flavio Bolsonaro',     # Flavio Bolsonaro
+    }
 

@@ -7,6 +7,8 @@ from httplib2 import Http
 from oauth2client.tools import argparser
 from oauth2client import file, client, tools
 
+from tweetsjb.settings import Settings
+
 args = argparser.parse_args()
 args.noauth_local_webserver = True  # avoid to open the browser
 
@@ -43,38 +45,75 @@ def _get_extended_status(tweet):
     return status
 
 
-def insert_tweet_into_sheet(tweet):
-    service = get_sheets_service()
-    date = arrow.get(tweet.created_at)
-
-    is_retweet = 'N'
-    if tweet._json.get('retweeted_status'):
-        is_retweet = 'S'
-
-    status = _get_extended_status(tweet._json)
+def save_it_on_spreadsheet(created_at, screen_name, status, is_retweet, tweet_url, data):
+    # service = get_sheets_service()
+    date = arrow.get(created_at)
 
     value_range_body = {
         "values": [
             [
                 date.format('DD/MM/YYYY HH:mm:ss'),
-                tweet.user.name,
+                screen_name,
                 status,
                 is_retweet,
-                "https://twitter.com/{user}/status/{tweet_id}".format(
-                    user=tweet.user.id_str,
-                    tweet_id=tweet.id_str
-                ),
-                json.dumps(tweet._json)
+                tweet_url,
+                json.dumps(data),
             ]
         ],
         "range": RANGE_NAME,
         "majorDimension": "ROWS"
     }
 
-    request = service.spreadsheets().values().append(
-        spreadsheetId=SPREADSHEET_ID,
-        range=RANGE_NAME,
-        valueInputOption=VALUE_INPUT_OPTION,
-        insertDataOption=INSERT_DATA_OPTION,
-        body=value_range_body)
-    response = request.execute()
+    print(value_range_body)
+
+    # request = service.spreadsheets().values().append(
+    #     spreadsheetId=SPREADSHEET_ID,
+    #     range=RANGE_NAME,
+    #     valueInputOption=VALUE_INPUT_OPTION,
+    #     insertDataOption=INSERT_DATA_OPTION,
+    #     body=value_range_body)
+    # response = request.execute()
+
+
+def insert_delete_tweet_into_sheet(tweet):
+    status = tweet.get('delete', {}).get('status')
+    user_id = status.get('user_id_str')
+    tweet_id = status.get('id_str')
+
+    created_at = tweet.get('delete').get('timestamp_ms')
+    screen_name = Settings.FOLLOW_IDS[user_id]
+    status_text = 'Tweet {} deletado'.format(tweet_id)
+    is_retweet = ''
+    tweet_url = "https://twitter.com/{user}/status/{tweet_id}".format(
+                    user=user_id,
+                    tweet_id=tweet_id
+                )
+
+    save_it_on_spreadsheet(
+        created_at[0:-3],  # remove ms
+        screen_name,
+        status_text,
+        is_retweet,
+        tweet_url,
+        tweet
+    )
+
+def insert_tweet_into_sheet(tweet):
+    is_retweet = 'N'
+    if tweet._json.get('retweeted_status'):
+        is_retweet = 'S'
+
+    status_text = _get_extended_status(tweet._json)
+    tweet_url = "https://twitter.com/{user}/status/{tweet_id}".format(
+                    user=tweet.user.id_str,
+                    tweet_id=tweet.id_str
+                ),
+
+    save_it_on_spreadsheet(
+        tweet.created_at,
+        tweet.user.name,
+        status_text,
+        is_retweet,
+        tweet_url,
+        tweet
+    )

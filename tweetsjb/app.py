@@ -27,7 +27,10 @@ def run():
 
     try:
         myStream = tweepy.Stream(auth = api.auth, listener=listener)
-        myStream.filter(follow=Settings.FOLLOW_IDS)
+        follow_ids = list(Settings.FOLLOW_IDS.keys())
+        print('Start to listen: {}'.format(follow_ids))
+        myStream.filter(follow=follow_ids)
+
     except (ConnectionResetError, ProtocolError) as e:
         print(e)
         run()  # reconnect to the streamming
