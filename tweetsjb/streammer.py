@@ -25,8 +25,5 @@ class StreamListener(tweepy.StreamListener):
             saveToFile(status)
             insert_tweet_into_sheet(status)
 
-        username = status.user.screen_name.ljust(15)
-        print('@{} - {}'.format(username, status.text))
-
     def on_error(self, err):
         print(err)
